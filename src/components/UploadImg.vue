@@ -43,9 +43,6 @@ export default {
       domID: parseInt(Date.now() + Math.random() * 9999 + 1)
     }
   },
-  created() {
-    console.log(this.domID)
-  },
   mounted() {
     this.initialUploader()
   },
@@ -82,7 +79,7 @@ export default {
             if (info.status === 200) {
               this.$emit('uploadEnd', '/' + file.imgUrl, file, up)
             }
-            console.log('/' + file.imgUrl)
+            console.log('/' + file.imgUrl, this.domID)
           },
           Error: (up, err) => {
             this.$emit('uploadError', err, up)
