@@ -5,7 +5,8 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Element)
 Vue.config.productionTip = false
-
+Vue.prototype.aliossHost = "https://img.xlxt.net/";
+Vue.prototype.serverHost = "https://www3.xlxt.net/AliyunOSS/GetOssSignature";
 if (!FileReader.prototype.readAsBinaryString) {
   FileReader.prototype.readAsBinaryString = function (fileData) {
     var binary = "";

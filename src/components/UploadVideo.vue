@@ -69,7 +69,7 @@ export default {
     // 是否本地预览
     preview: {
       type: Boolean,
-      default: true
+      default: false
     },
     // 上传进度
     progress: {
@@ -84,6 +84,7 @@ export default {
       // 上传是否禁用
       uploadDisabled: false,
       // 视频ID
+      videoId: ""
     }
   },
   mounted() {
@@ -109,8 +110,9 @@ export default {
       }
       var userData = '{"Vod":{}}'
       this.uploader = this.createUploader()
+      
       this.uploader.addFile(file, null, null, null, userData)
-      console.log(file)
+      this.uploadDisabled = false
     },
     // 初始化上传
     createUploader () {
@@ -125,18 +127,15 @@ export default {
         // 添加文件成功
         addFileSuccess: (uploadInfo) => {
           // 按钮禁用
-          this.uploadDisabled = true
+          console.log(uploadInfo)
           if (this.auto) {
-            this.uploader.startUpload()
+            this.startUpload()
           }
         },
         // 开始上传
         onUploadstarted: (uploadInfo) => {
+          this.uploadDisabled = true
           this.getVoucher(uploadInfo)
-        },
-        // 文件上传成功
-        onUploadSucceed: (uploadInfo) => {
-          console.log(uploadInfo)
         },
         // 文件上传失败
         onUploadFailed: (uploadInfo, code, message) => {
@@ -157,21 +156,28 @@ export default {
         },
         // 全部文件上传结束
         onUploadEnd: (uploadInfo) => {
+          console.log(uploadInfo, this.videoId, '上传成功')
           this.uploadDisabled = false
-          this.$emit('uploadEnd')
+          this.$emit('uploadEnd', this.videoId)
+          // 清空上传列表
+          this.uploader.cleanList()
         }
       })
       return uploader
+    },
+    // 开始上传
+    startUpload() {
+      this.uploader.startUpload()
     },
     // 生成上传凭证
     getVoucher(uploadInfo) {
       let createUrl = '/AliyunVideo/CreateUploadVideo'
       axios.get(createUrl).then(res=> {
-        console.log(res, 1231)
         let data = JSON.parse(res.data.Data);
         let uploadAuth = data.UploadAuth
         let uploadAddress = data.UploadAddress
-        let videoId = data.VideoId
+        let videoId = this.videoId = data.VideoId
+        console.log(videoId)
         if (uploadInfo.videoId) {
           this.uploader.resumeUploadWithAuth(uploadAuth); //刷新上传凭证
         } else {
@@ -181,18 +187,15 @@ export default {
     },
     // 暂停上传
     pauseUpload () {
+      console.log(this.uploader)
       if (this.uploader !== null) {
         this.uploader.stopUpload()
-        this.resumeDisabled = false
-        this.pauseDisabled = true
       }
     },
     // 恢复上传
     resumeUpload () {
       if (this.uploader !== null) {
-        this.uploader.startUpload()
-        this.resumeDisabled = true
-        this.pauseDisabled = false
+        this.uploader.resumeFile(0)
       }
     },
   },
