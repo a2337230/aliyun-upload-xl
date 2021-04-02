@@ -44,19 +44,24 @@
       <div class="right">
         <div class="header">
           <h2>图片上传</h2>
-          <upload-img>
+          <upload-img  @uploadEnd="uploadEnd1">
             <el-button type="primary">图片上传</el-button>
           </upload-img>
-          <upload-img>
+          <upload-img  @uploadEnd="uploadEnd2">
             <el-button type="primary">图片上传</el-button>
           </upload-img>
-          <upload-img>
+          <upload-img  @uploadEnd="uploadEnd3">
             <el-button type="primary">图片上传</el-button>
           </upload-img>
-          <upload-img>
+          <upload-img  @uploadEnd="uploadEnd4">
             <el-button type="primary">图片上传</el-button>
           </upload-img>
         </div>
+        <ul>
+          <li v-for="item in imgList" :key="item">
+            <img v-for="citem in item" :key="citem" :src="'https://img.xlxt.net' + citem">
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -75,7 +80,13 @@ export default {
       progress: 0,
       value: false,
       value1: false,
-      videoPath: ""
+      videoPath: "",
+      imgList: [
+        [],
+        [],
+        [],
+        []
+      ]
     }
   },
   methods: {
@@ -91,6 +102,19 @@ export default {
     },
     resumeUpload() {
       this.$refs.upload.resumeUpload()
+    },
+    uploadEnd1(val) {
+      this.imgList[0].push(val)
+      console.log(this.imgList, val)
+    },
+    uploadEnd2(val) {
+      this.imgList[1].push(val)
+    },
+    uploadEnd3(val) {
+      this.imgList[2].push(val)
+    },
+    uploadEnd4(val) {
+      this.imgList[3].push(val)
     }
   }
 }
