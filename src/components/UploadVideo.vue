@@ -174,6 +174,7 @@ export default {
         let uploadAuth = data.UploadAuth
         let uploadAddress = data.UploadAddress
         let videoId = this.videoId = data.VideoId
+        this.$emit('getVideoId', data.VideoId)
         if (uploadInfo.videoId) {
           this.uploader.resumeUploadWithAuth(uploadAuth); //刷新上传凭证
         } else {
