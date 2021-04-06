@@ -73,7 +73,7 @@ export default {
             files.forEach(item => {
               item.type = item.type.split('/')[1]
             })
-            this.set_upload_param(up, files, true);
+            this.set_upload_param(up, files);
           },
           UploadProgress: (up, files) => {
             this.$emit('updateProgress', files.percent, files, up)
