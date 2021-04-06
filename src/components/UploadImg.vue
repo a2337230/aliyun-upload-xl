@@ -14,7 +14,7 @@ export default {
     // 限制文件上传个数
     multiple: {
       type: Number,
-      default: 10
+      default: 1
     },
     // 限制上传类型
     mimetypes: {
@@ -70,6 +70,9 @@ export default {
             if (files.length > this.multiple) {
               up.files.length = files.length = this.multiple
             }
+            files.forEach(item => {
+              item.type = item.type.split('/')[1]
+            })
             this.set_upload_param(up, files, true);
           },
           UploadProgress: (up, files) => {
@@ -79,7 +82,6 @@ export default {
             if (info.status === 200) {
               this.$emit('uploadEnd', '/' + file.imgUrl, file, up)
             }
-            console.log('/' + file.imgUrl, this.domID)
           },
           Error: (up, err) => {
             this.$emit('uploadError', err, up)
@@ -95,10 +97,8 @@ export default {
             params: { dir: this.dir}
           }).then(res => {
             let data = res.data
-            console.log(data)
             if (data.Code === 200) {
-              let type = item.type.split('/')[1]
-              item.imgUrl = `${this.dir}/${moment(new Date()).format('YYYY/MM/DD')}/${Date.now()}.${type}`
+              item.imgUrl = `${this.dir}/${moment(new Date()).format('YYYY/MM/DD')}/${Date.now()}.${item.type}`
               let new_multipart_params = {
                 'key': item.imgUrl,
                 'policy': data.Data.policy,
@@ -113,7 +113,7 @@ export default {
               up.start()
             }
           })
-        }, parseInt(Math.random() * 500))
+        }, parseInt(Math.random() * 1000))
       })
     }
   }

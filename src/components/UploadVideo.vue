@@ -110,7 +110,6 @@ export default {
       }
       var userData = '{"Vod":{}}'
       this.uploader = this.createUploader()
-      
       this.uploader.addFile(file, null, null, null, userData)
       this.uploadDisabled = false
     },
@@ -127,8 +126,7 @@ export default {
         // 添加文件成功
         addFileSuccess: (uploadInfo) => {
           // 按钮禁用
-          console.log(uploadInfo)
-          if (this.auto) {
+          if (this.auto && uploadInfo) {
             this.startUpload()
           }
         },
@@ -156,9 +154,8 @@ export default {
         },
         // 全部文件上传结束
         onUploadEnd: (uploadInfo) => {
-          console.log(uploadInfo, this.videoId, '上传成功')
           this.uploadDisabled = false
-          this.$emit('uploadEnd', this.videoId)
+          this.$emit('uploadEnd', this.videoId, uploadInfo)
           // 清空上传列表
           this.uploader.cleanList()
         }
@@ -177,7 +174,6 @@ export default {
         let uploadAuth = data.UploadAuth
         let uploadAddress = data.UploadAddress
         let videoId = this.videoId = data.VideoId
-        console.log(videoId)
         if (uploadInfo.videoId) {
           this.uploader.resumeUploadWithAuth(uploadAuth); //刷新上传凭证
         } else {
@@ -187,7 +183,6 @@ export default {
     },
     // 暂停上传
     pauseUpload () {
-      console.log(this.uploader)
       if (this.uploader !== null) {
         this.uploader.stopUpload()
       }

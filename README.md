@@ -31,13 +31,14 @@ https://www3.xlxt.net/uploaddemo/
 
 #### Events
 
-| 事件名称    | 回调参数         | 说明              |
-| ----------- | ---------------- | ----------------- |
-| errSize     | -                | 上传超出大小      |
-| localPath   | 返回本地视频地址 | 需配合preview使用 |
-| errFile     | -                | 上传失败          |
-| pauseUpload | -                | 文件上传被取消    |
-| uploadEnd   | 视频ID           | 视频上传成功      |
+| 事件名称    | 回调参数         | 说明                 |
+| ----------- | ---------------- | -------------------- |
+| errSize     | -                | 上传超出大小         |
+| localPath   | 返回本地视频地址 | 需配合preview使用    |
+| errFile     | -                | 上传失败             |
+| pauseUpload | -                | 文件上传被取消       |
+| getVideoId  | 视频ID           | 视频开始上传时获取id |
+| uploadEnd   | 视频ID           | 视频上传成功         |
 
 #### Methods
 

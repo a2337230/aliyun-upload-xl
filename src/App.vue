@@ -45,10 +45,10 @@
         <div class="header">
           <h2>图片上传</h2>
           <upload-img  @uploadEnd="uploadEnd1">
-            <el-button type="primary">图片上传</el-button>
+            <el-button type="primary">单图上传</el-button>
           </upload-img>
-          <upload-img  @uploadEnd="uploadEnd2">
-            <el-button type="primary">图片上传</el-button>
+          <upload-img  @uploadEnd="uploadEnd2" :multiple="5">
+            <el-button type="primary">多图上传</el-button>
           </upload-img>
           <upload-img  @uploadEnd="uploadEnd3">
             <el-button type="primary">图片上传</el-button>
@@ -57,9 +57,9 @@
             <el-button type="primary">图片上传</el-button>
           </upload-img>
         </div>
-        <ul>
-          <li v-for="item in imgList" :key="item">
-            <img v-for="citem in item" :key="citem" :src="'https://img.xlxt.net' + citem">
+        <ul class="img-list">
+          <li v-for="(item, index) in imgList" :key="index">
+            <img v-for="(citem, cindex) in item" :key="cindex" :src="'https://img.xlxt.net' + citem">
           </li>
         </ul>
       </div>
@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       progress: 0,
-      value: false,
+      value: true,
       value1: false,
       videoPath: "",
       imgList: [
@@ -153,5 +153,18 @@ export default {
 .video-box video {
   width: 100%;
   max-height: 350px;
+}
+.img-list {
+  margin: 10px;
+  border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+}
+.img-list li {
+  height: 120px;
+}
+.img-list li img {
+  width: 100px;
+  height: 120px;
 }
 </style>
