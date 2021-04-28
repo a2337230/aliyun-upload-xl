@@ -84,15 +84,29 @@ export default {
       // 上传是否禁用
       uploadDisabled: false,
       // 视频ID
-      videoId: ""
+      videoId: "",
+      // 上一次上传的视频
+      prevFile: ""
     }
   },
   mounted() {
+    // 兼容同一个视频重复上传
+    document.querySelector('.files').addEventListener('click', function() {
+      this.value = '';
+    }, false);
     this.uploader = this.createUploader()
   },
   methods: {
     fileChange(e) {
+      // console.log(e.target.files)
       const file = e.target.files[0]
+      // console.log(file.name, this.prevFile)
+      // if (file.name === this.prevFile) {
+      //   console.log('同一个视频')
+      //   return
+      // }
+      this.prevFile = file.name
+      this.$emit('fileInfo', file)
       // 如果超出大小
       if (file.size >= this.fileSize) {
         this.$emit('errSize')
@@ -175,17 +189,28 @@ export default {
         let uploadAddress = data.UploadAddress
         let videoId = this.videoId = data.VideoId
         this.$emit('getVideoId', data.VideoId)
-        if (uploadInfo.videoId) {
-          this.uploader.resumeUploadWithAuth(uploadAuth); //刷新上传凭证
-        } else {
-          this.uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)  
-        }          
+        this.uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)  
+        // if (uploadInfo.videoId) {
+        //   this.uploader.resumeUploadWithAuth(uploadAuth); //刷新上传凭证
+        // } else {
+        //   this.uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)  
+        // }          
       })
     },
     // 暂停上传
     pauseUpload () {
       if (this.uploader !== null) {
         this.uploader.stopUpload()
+        this.uploadDisabled = false
+      }
+    },
+    // 清空上传列表
+    cleanList () {
+      if (this.uploader !== null) {
+        this.uploader.stopUpload()
+        this.uploader.cleanList()
+        this.uploader = this.createUploader()
+        this.uploadDisabled = false
       }
     },
     // 恢复上传

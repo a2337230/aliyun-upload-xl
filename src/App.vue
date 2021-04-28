@@ -10,12 +10,13 @@
             :auto="value"
             :preview="value1"
             @localPath="localPath"
+            @fileInfo="fileInfo"
           >
             <el-button type="primary">视频上传</el-button>
           </upload-video>
         </div>
         <div class="progress">
-          <p>进度</p>
+          <p>进度 ---- {{fileName}}</p>
           <el-progress :text-inside="true" :stroke-width="26" :percentage="progress"></el-progress>
         </div>
         <div class="btn-list">
@@ -28,7 +29,7 @@
           </el-switch>
           <el-button type="primary" :disabled="value" @click="startUpload">开始上传</el-button>
           <el-button type="primary" @click="pauseUpload">暂停上传</el-button>
-          <el-button type="primary" @click="resumeUpload">恢复上传</el-button>
+          <el-button type="primary" @click="resumeUpload">清空上传</el-button>
           <el-switch
             v-model="value1"
             active-text="开启本地预览"
@@ -86,10 +87,14 @@ export default {
         [],
         [],
         []
-      ]
+      ],
+      fileName: ""
     }
   },
   methods: {
+    fileInfo(val) {
+      this.fileName = val.name
+    },
     startUpload() {
       this.$refs.upload.startUpload()
     },
@@ -101,7 +106,7 @@ export default {
       this.$refs.upload.pauseUpload()
     },
     resumeUpload() {
-      this.$refs.upload.resumeUpload()
+      this.$refs.upload.cleanList()
     },
     uploadEnd1(val) {
       this.imgList[0].push(val)

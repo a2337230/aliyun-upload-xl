@@ -33,6 +33,7 @@ https://www3.xlxt.net/uploaddemo/
 
 | 事件名称    | 回调参数         | 说明                 |
 | ----------- | ---------------- | -------------------- |
+| fileInfo    | 返回选中视频信息 | 文件信息             |
 | errSize     | -                | 上传超出大小         |
 | localPath   | 返回本地视频地址 | 需配合preview使用    |
 | errFile     | -                | 上传失败             |
